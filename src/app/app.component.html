@@ -1,0 +1,35 @@
+<!-- src/app/app.component.html -->
+<h1>Messages</h1>
+
+<ul>
+  @for (message of messages; track $index) {
+    <li>
+      {{ message.content }}, {{ message.author }}
+    </li>
+  }
+</ul>
+
+
+<button (click)="createModeSwitch()">Crear Mensaje</button>
+
+@if (createMode) {
+<h1>Create a New Message</h1>
+<form class="form" (submit)="onSubmit(contentInput.value, categoryInput.value, authorInput.value)">
+  <span class="input-span">
+    <label for="content" class="content">Content</label>
+    <input type="text" #contentInput placeholder="Content"/>
+  </span>
+  <span class="input-span">
+    <label for="category" class="category">Category</label>
+    <input type="text" #categoryInput placeholder="Category"/>
+  </span>
+  <span class="input-span">
+    <label for="author" class="author">Author</label>
+    <input type="text" #authorInput placeholder="Author"/>
+  </span>
+  <input class="submit" type="submit" value="Save"/>
+</form>
+
+
+
+}
