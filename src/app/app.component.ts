@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from './service/message.service';
 import { CategoryService } from './service/category.service';
-import { Message } from './model/message.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -13,20 +11,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AppComponent {
   
   messages: any[] = [];
+  categories: any[] = [];
   createMode: boolean = false;
   content: string = ''; 
   category: string = '';
   author: string = '';
 
-  constructor(private fb: FormBuilder, private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.loadMessages();
+    this.loadCategories();
   }
 
-  loadMessages(): void {
-    this.messageService.getMessages().subscribe(data => {
-      this.messages = data;
+  getCategoryMessages(selectedCategory: string): void {
+    this.categoryService.getCategoryByName(selectedCategory).subscribe(data => {
+      this.messages = data.messages;
+    });
+    console.log(this.messages)
+  }
+  
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe(data => {
+      this.categories = data;
     });
   }
   
@@ -43,7 +49,7 @@ export class AppComponent {
       };
       console.log('Form submitted:', messageData);
       this.messageService.createMessage(messageData).subscribe(data => {
-        this.messages.push(data);
+        this.loadCategories();
       });
     }
   }

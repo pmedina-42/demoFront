@@ -25,22 +25,7 @@ export class MessageService {
     });
   }
 
-  getMessagesByCategory(category: string): Observable<Message[]> {
-    return new Observable(observer => {
-      fetch(`${this.apiUrl}/categories/${category}`)
-        .then(response => response.json())
-        .then(data => {
-          observer.next(data);
-          observer.complete();
-        })
-        .catch(err => {
-          observer.error(err);
-        });
-    });
-  }
-
   createMessage(message: Message): Observable<Message> {
-      
     return new Observable(observer => {
       fetch(this.apiUrl, {
         method: 'POST',

@@ -2,15 +2,23 @@
 <h1>Messages</h1>
 
 <ul>
-  @for (message of messages; track $index) {
+  @for (category of categories; track $index) {
     <li>
-      {{ message.content }}, {{ message.author }}
+      Category: {{ category.name }} <button (click)="getCategoryMessages(category.name)"></button>
     </li>
+  }
+  
+  @if (messages.length > 0) {
+    @for (message of messages; track $index) {
+      <li>
+        Message: {{ message.content }}, author: {{ message.author }}
+      </li>  
+    }
   }
 </ul>
 
 
-<button (click)="createModeSwitch()">Crear Mensaje</button>
+<button (click)="createModeSwitch()">Create message</button>
 
 @if (createMode) {
 <h1>Create a New Message</h1>

@@ -7,20 +7,58 @@ import { Category, Message } from '../model/message.model';
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'localhost:8080/categories';
+  private apiUrl = 'http://localhost:8080/categories';
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrl);
+    return new Observable(observer => {
+      fetch(this.apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(err => {
+          observer.error(err);
+        });
+    });
   }
   
-  getCategoryByName(name: string): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrl + "/name/" + name)
+  getCategoryByName(name: string): Observable<Category> {
+    return new Observable(observer => {
+      fetch(`${this.apiUrl}/name/${name}`)
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(err => {
+          observer.error(err);
+        });
+    });
   }
 
-  createCategory(message: Category): Observable<Category> {
-    return this.http.post<Category>(this.apiUrl, message);
+  createCategory(category: Category): Observable<Category> {
+    return new Observable(observer => {
+      fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(category)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(err => {
+          observer.error(err);
+        });
+    });
   }
+  
 }
 
